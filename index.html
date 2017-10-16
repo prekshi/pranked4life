@@ -1,0 +1,582 @@
+<html>
+<head>
+  <link href="assets/fonts/sophia/stylesheet.css" rel="stylesheet" type="text/css" charset="utf-8" />
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Lato:300:100' rel='stylesheet' type='text/css'>
+  <link rel='stylesheet' type="text/css" href="./assets/styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/js/react.js"></script>
+  <script src="/js/react-dom.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+  <script src="/js/rsvp.jsx" type="text/babel"></script>
+
+  <style>
+  
+    .rsvp-root {
+      position: relative;
+    }
+    .rsvp-root ul {
+      margin: 0;
+      padding: 0;
+      padding-bottom: 25px;
+    }
+
+    .rsvp-root ul li {
+      border-bottom: 1px solid #ddd;
+      padding: 5px;
+      cursor: pointer;
+      list-style-type: none;
+    }
+    .rsvp-root ul li:last-child {
+      border-bottom: none;
+    }
+
+    .rsvp-root label {
+      text-transform: uppercase;
+      font-size: 0.95em;
+      color: #999;
+      padding-top: 10px;
+      display: block;
+      clear:both;
+    }
+    .rsvp-root ul li:hover {
+      background: #eee;
+    }
+
+    .rsvp-root input {
+      width:100%;
+      font-size:16px;
+      padding: 4px 7px;
+      margin-bottom: 4px;
+    }
+    .rsvp-root input.rehearsalGuest {
+      width: 66%;
+      margin-right: 10px;
+    }
+    .rsvp-root h2 {
+      font-size: 2.8em;
+      padding-top: 25px;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .rsvp-root form {
+      margin-top:10px;
+      margin-left: 30px;
+      margin-right: 30px;
+    }
+    .rsvp-message {
+      padding: 0 30px;
+    }
+    .rsvp-back {
+      position: absolute;
+      top: 15px;
+      left: 30px;
+      cursor: pointer;
+    }
+    .rsvp-back:hover {
+      color: black;
+    }
+    .rsvp-error {
+      padding: 0 30px;
+      background-color: #ffcccc; border-color:1px solid red; padding-top:5px; padding-bottom:5px;
+    }
+    .rsvp-actions {
+      clear:both;
+      text-align: center;
+      padding:15px;
+    }
+    .rsvp-spinner {
+      opacity: 0;
+      display: inline-block;
+      position: absolute;
+      width: 17px;
+      height: 17px;
+      left: 0;
+    }
+    .rsvp-spinner.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <!--[if lt IE 10]>
+  <div style="width:100%; height:2.5em; background-color:red; color: white; text-align:center; font-size:1.1em; font-weight:bold; line-height: 2.5em; font-family:sans-serif;">
+  Our site may not display properly in your browser. Please upgrade to Chrome, Safari or Microsoft Edge!
+    </div>
+<![endif]-->
+
+  <script>
+  function onShowRSVP() {
+    document.getElementById('rsvp-background').style.display = 'block';
+    document.getElementById('rsvp').style.display = 'block';
+  }
+  function onHideRSVP() {
+    document.getElementById('rsvp-background').style.display = 'none';
+    document.getElementById('rsvp').style.display = 'none';
+  }
+  </script>
+  <div id="rsvp-background" onClick="onHideRSVP()" style="display: none; position: fixed; z-index: 101; top: 0; right: 0; left: 0; bottom: 0; background-color: rgba(0,0,0,0.5);">
+  </div>
+
+  <div id="rsvp" style="display: none;  position: fixed; z-index: 201; top: 45%; left: 50%; transform: translate(-50%,-50%);">
+    <div style="width: 400px; background-color: white; margin: auto; box-shadow: 0 2px 18px rgba(0,0,0,0.4);">
+      <div class="rsvp-root">
+        <h2>RSVP</h2>
+        <div id="rsvp-container"></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="height:800px; overflow:hidden; pointer-events:none;">
+<!-- PG 
+    <video id="hero-video" muted loop poster="assets/hero-thumb.jpg">
+      <source src="assets/hero-shorter-1000.mp4" type="video/mp4" />
+      <source src="assets/hero-shorter-1000.ogv" type="video/ogg" />
+    </video>
+    
+ -->   
+    <img id="hero-image" src="./assets/images/coverphoto.jpg">
+
+
+
+  </div>
+  <div id="hero">
+    <h3>PREKSHI &amp; ANKIT</h3>
+    <h2>are getting married</h2>
+    <!-- <button id="rsvp-button" onClick="onShowRSVP()">RSVP</button> -->
+  </div>
+  <div id="nav-filler"></div>
+  <ul id="nav">
+    <li><a href="#our-story">OUR STORY</a></li>
+    <li><a href="#gallery">GALLERY</a></li>
+    <li><a href="#festivities">FESTIVITIES</a></li>
+    <!--<li><a href="#accomodations">ACCOMODATIONS</a></li>
+    <li><a href="#registry">REGISTRY</a></li>
+    <li><a href="#footer">WEDDING PARTY</a></li> 
+    <li><a onClick="onShowRSVP()">RSVP</a></li> -->
+  </ul>
+  <section id="our-story">
+    <h2>our story</h2>
+    <p>
+    <div class="story-line">
+      <div class="name ben">ANKIT</div> It&#39s date night with this girl Prekshi and this is going to be a disaster! I was totally hungover during this past weekend, i have to send a investment memo to our board that is just not getting over and now my car has been locked by the security guard for wrong parking. 
+    </div>
+    <div class="story-line">
+      <div class="name preethi">PREKSHI</div>  I flew to Bombay and went to Bandra, directly from the airport, to meet this guy, Ankit. But, he was late, and kept telling me, another 20 mins. Eventually, he pushed the date by an hour and a half! I ended up going to Palladium to meet him.
+    </div>
+    <div class="story-line">
+      <div class="name ben">ANKIT</div>  is this for real, she loves the same food as i do? Sushi and south indian food??? Super fun to talk to.  Date 3: Sat with her for 6 hours and there was no one awkward silence moment.  Could she be the one???
+    </div>
+    <div class="story-line">
+      <div class="name preethi">PREKSHI</div> Ok, I have dropped subtle hints here and there, that I&#39m ready. Either he&#39s not interested, or I will have to teach him how to read hints (PS: I am still teaching him how to read hints). 
+    </div>
+
+    <div class="story-line">
+      <div class="name ben">ANKIT</div> She has now met all my friends and family and they all love her!  I better propose soon!!! Had to do something special, a &#34grand gesture&#34 as she mentioned. So did it on a yacht in the Arabian sea during sunset. 
+    </div>
+    <div class="story-line">
+      <div class="name preethi">PREKSHI</div> Had the most special day in Bombay - March 18th, 2017. We went on a yacht, Ankit got down on one knee and asked me to marry him. I said YES! And then, because our pictures didn&#39t come out nicely, we changed the angle, and then he got down on his knee again, and asked me to marry him (again!)
+    </div>
+    <!--
+    <div class="story-line">
+      <div class="name ben">BEN</div> Nope.
+    </div>
+    <div class="story-line">
+      <div class="name preethi">PREETHI</div> So we decided on San Francisco&#8212;land of sunshine, high-end coffee bars, and hipsters. I found a job at a startup and two months later, I&#8216;d moved! Soon after, Ben packed his bags in Nashville and the two of us drove across the country, stopping at national parks along the way.
+    </div>
+
+    <div class="story-line">
+      <div class="name ben">BEN</div> I found an apartment less than a mile away&#8212;we were finally in the same city after so many years of long distance. We explored California, learned to cook, and fell more and more in love. One day, we packed a picnic and went over the Golden Gate Bridge to Kirby Cove to eat by the water. Preethi had no idea what I had in store.
+    </div>
+    <div class="story-line">
+      <div class="name preethi">PREETHI</div> Except I totally did. I&#8216;d had my nails done for months. Ben asked my dad for my hand in marriage in July. We went ring shopping the next month, and then I waited. And waited&#8230;
+    </div>
+    <div class="story-line">
+      <div class="name ben">BEN</div> Had to throw her off the trail a bit! whatever.
+    </div>
+    <div class="story-line">
+      <div class="name preethi">PREETHI</div> It was the most wonderful proposal. I lost it when I saw 12 of our closest friends running down a hill after Ben proposed. That was the biggest surprise!  Ben had coordinated it all, and we all celebrated into the evening with champagne!
+    </div> 
+    -->
+  </div>
+  <div class="images-flex">
+    <div>
+      <img src="./assets/images/Story_PIC1.jpeg"/>
+      <div class="meta">Our initial date nights!</div>
+    </div>
+    <div>
+      <img src="./assets/images/Story_PIC2.jpeg"/>
+      <div class="meta">When Ankit was asked to describe our best memory, he chose this picture. This was the day we knew! </div>
+    </div>
+
+    <div>
+      <img src="./assets/images/Story_PIC3.jpeg"/>
+      <div class="meta">The re-take during the proposal. Second time's a charm!</div>
+    </div>
+
+  </div>
+
+  </p>
+  </section>
+
+  <section id="gallery" class="dark-blue">
+    <h2>engagement photos</h2>
+    <div id="carousel">
+      <div class="btn next" onclick="goToNext()"> &rarr; </div>
+      <div class="btn prev" onclick="goToPrev()"> &larr; </div>
+    </div>
+    <div id="carousel-thumbs"></div>
+
+  </section>
+  
+  
+<section id="festivities" class="light-blue">
+    <h2>festivities</h2>
+    <div class="section-horizontal-flex">
+      <div>
+        <img src="./assets/images/phipps.jpg" style="border-radius: 50%; width: 450px; max-width: 50vw;">
+      </div> 
+      <div style="padding:50px;"></div> 
+      <div>
+        <div class="meta">Wednesday, November 22, 2017</div>
+        <div class="value large">7pm | Sangeet</div>
+        <div class="value-more">
+          <a target="_blank" href="https://taj.tajhotels.com/en-in/taj-city-centre-gurugram/">Taj City Center, Gurugram
+          Sector 44, Gurugram</a>
+           +91 124 6671234
+             </div>
+        <div class="meta">Dress Code: Formal: Indo-western / Cocktail Attire</div>
+
+<!--        <div class="meta">7pm</div>
+        <div class="value">Sangeet</div>
+
+        <div class="value">COCKTAIL HOUR + RECEPTION</div> 
+      </div>
+            <div style="padding:100px;"></div>
+
+<div>
+        <div class="meta">Thursday, November 23, 2017</div>
+        <div class="value large">The Wedding</div>
+        <div class="value-more">
+          <a target="_blank" href="http://www.westingurgaon.com">The Westin, Gurgaon
+          Sector 29, Gurugram</a>
+           +91 124 4977777
+             </div>
+        <div class="meta">Dress Code: Formal: Traditional Indian</div>
+
+        <div class="meta">7pm</div>
+        <div class="value">Pheras</div>
+
+         <div class="meta">8 30pm</div>
+        <div class="value">Dinner and Reception</div>
+
+      </div>-->
+
+    </div>
+  </section>
+  
+  
+ <section id="festivities" class="light-blue">
+         <div class="section-horizontal-flex">
+
+      <div>
+        <div class="meta">Thursday, November 23, 2017</div>
+        <div class="value large">The Wedding</div>
+        <div class="value-more">
+          <a target="_blank" href="http://www.westingurgaon.com">The Westin, Gurgaon
+          Sector 29, Gurugram</a>
+           +91 124 4977777
+             </div>
+        <div class="meta">Dress Code: Formal: Traditional Indian</div>
+        <div class="meta">7pm</div>
+        <div class="value">Pheras</div>
+
+         <div class="meta">8 30pm</div>
+        <div class="value">Dinner and Reception</div>
+
+<!--        <div class="meta">7pm</div>
+        <div class="value">Sangeet</div>
+
+        <div class="value">COCKTAIL HOUR + RECEPTION</div> 
+      </div>
+            <div style="padding:100px;"></div>
+
+<div>
+        <div class="meta">Thursday, November 23, 2017</div>
+        <div class="value large">The Wedding</div>
+        <div class="value-more">
+          <a target="_blank" href="http://www.westingurgaon.com">The Westin, Gurgaon
+          Sector 29, Gurugram</a>
+           +91 124 4977777
+             </div>
+        <div class="meta">Dress Code: Formal: Traditional Indian</div>
+
+        <div class="meta">7pm</div>
+        <div class="value">Pheras</div>
+
+         <div class="meta">8 30pm</div>
+        <div class="value">Dinner and Reception</div>
+
+      </div>-->
+
+    </div>
+      <div style="padding:50px;"></div>
+
+      <div>
+        <img src="./assets/images/phipps.jpg" style="border-radius: 50%; width: 450px; max-width: 50vw;">
+      </div>
+
+
+  </section>
+  <!-- PG
+  <section id="accomodations" class="white">
+    <h2 style="padding-bottom: 0;">accomodations</h2>
+    <p style="text-align: center; font-weight: bold; padding-bottom:20px; font-style:italic;">Book your rooms early - block rates expire about four weeks before the wedding!</p>
+
+    <p style="padding-bottom:36px;">All hotels are less than a mile away from the ceremony location. Please book hotels early to receive discounted rates. Call to make reservations, and let the hotel know you're with the Raju-Gotow party. </p>
+
+    <div class="hotels">
+      <div class="hotel">
+        <img src="./assets/images/wyndham.jpg"/>
+        <h3>Wyndham<br/>University Center</h3>
+        <div class="address">100 Lytton Ave
+          Pittsburgh, PA 15213
+          (412) 682-6200
+        </div>
+        <div class="price">
+          $189/night
+        </div>
+      </div>
+      <div class="hotel">
+        <img src="./assets/images/hilton_garden.jpg"/>
+        <h3>Hilton Garden Inn</h3>
+        <div class="address">3454 Forbes Ave
+          Pittsburgh, PA 15213
+          (412) 683-2040
+        </div>
+        <div class="price">
+          $142 - $147/night
+        </div>
+      </div>
+      <div class="hotel">
+        <img src="./assets/images/quality_inn.jpg"/>
+        <h3>Quality Inn</h3>
+        <div class="address">3401 Boulevard of the Allies
+          Pittsburgh, PA 15213
+          (412) 683-6100
+        </div>
+        <div class="price">
+          $119 - $149/night
+        </div>
+      </div>
+      <div class="hotel">
+        <img src="./assets/images/hampton_inn.jpg"/>
+        <h3>Hampton Inn University Center</h3>
+        <div class="address">3315 Hamlet St
+          Pittsburgh, PA 15213
+          (412) 681-1000
+        </div>
+        <div class="price">
+          $150 - $169/night
+        </div>
+      </div>
+    </div>
+  </section>
+  -->
+  
+    <!-- PG
+
+  <section id="registry" class="white">
+    <h2>registries</h2>
+    <p style="padding-bottom:36px; text-align:center;">
+      Your presence is the best gift we can receive, but but if you would like to give us tangible gifts for our home or experiences during our honeymoon, we are registered at the following places.
+    </p>
+    <div class="registry-options">
+      <div class="registry-option">
+        <a href="https://www.amazon.com/wedding/preethi-raju-ben-gotow-pittsburgh-august-2016/registry/39F35DHAIR1VO" target="_blank"><img src="./assets/images/registry-amazon.png"/></a>
+        <br/>
+        <a href="https://www.amazon.com/wedding/preethi-raju-ben-gotow-pittsburgh-august-2016/registry/39F35DHAIR1VO" target="_blank"><button class="btn">GO TO REGISTRY</button></a>
+      </div>
+      <div class="registry-option">
+        <a href="http://www.cb2.com/gift-registry/preethi-raju-and-ben-gotow/r5476039" target="_blank"><img src="./assets/images/registry-cb2.png"/></a>
+        <br/>
+        <a href="http://www.cb2.com/gift-registry/preethi-raju-and-ben-gotow/r5476039" target="_blank"><button class="btn">GO TO REGISTRY</button></a>
+      </div>
+      <div class="registry-option">
+        <a href="https://www.zola.com/registry/preethiandben" target="_blank"><img src="./assets/images/registry-zola.png"/></a>
+        <br/>
+        <a href="https://www.zola.com/registry/preethiandben" target="_blank"><button class="btn">GO TO REGISTRY</button></a>
+      </div>
+    </div>
+  </section>
+  
+    -->
+    <!-- PG
+
+  <section id="travel-leisure" class="yellow">
+    <h2>travel + leisure in pittsburgh</h2>
+    <p>
+Nothing beats Pittsburgh in the summer time! Walk around Oakland, Visit some museums, or go get some of our favorite half-priced food.
+    </p>
+    <div class="place full">
+      <div class="description">
+        <h3>Pittsburgh International Airport</h3>
+        <div class="meta">22 miles from hotels</div>
+        <p>
+          We recommend taking a Lyft or Uber (~ $30) into the city instead of renting a car. Once you're in Oakland, there's plenty to do and the wedding events are nearby.
+        </p>
+      </div>
+    </div>
+    <div class="place dark left" style="background-color: #cb1a4a;">
+      <img src="./assets/images/cmu.jpg"/>
+      <div class="description">
+        <h3>Carnegie Mellon University</h3>
+        <div class="meta">0.5 miles from hotels</div>
+        <p>Carnegie Mellon has a beautiful campus right around the corner from the wedding venue. Walk over and explore! </p>
+      </div>
+    </div>
+    <div class="place right">
+      <img src="./assets/images/cathedral.jpg"/>
+      <div class="description">
+        <h3>Cathedral of Learning</h3>
+        <div class="meta">0.5 miles from hotels</div>
+        <p>Owned by the University of Pittsburgh, this is the tallest educational building in the western hemipshere. Check out the Nationality Rooms!</p>
+      </div>
+    </div>
+    <div class="place dark left" style="background-color: #1b9ad1;">
+      <img src="./assets/images/museum.jpg"/>
+      <div class="description">
+        <h3>Carnegie Art &amp; Natual History Museums</h3>
+        <div class="meta">0.5 miles from hotels</div>
+        <p>The museum of natural history is home to the world's largest collection of Jurrasic dinosaurs - you could spend all day here!</p>
+      </div>
+    </div>
+    <div class="place dark right" style="background-color: #58647b;">
+      <img src="./assets/images/warhol.jpg"/>
+      <div class="description">
+        <h3>Andy Warhol Museum</h3>
+        <div class="meta">5 miles from hotels</div>
+        <p>Andy Warhol was a Pittsburgh-native and the museum offers a fun look at pop art.</p>
+      </div>
+    </div>
+  </section>
+  
+-->
+
+  <section id="footer" style="text-align:center;">
+    <h2>Can't wait to celebrate</br>with you all!</h2>
+  </section>
+
+  <script>
+
+    var nav = document.getElementById('nav');
+    var navFiller = document.getElementById('nav-filler');
+    var fixedThreshold = nav.offsetTop;
+
+    var thinkAboutNav = function(e) {
+      if ((window.innerWidth > 600) && (document.scrollingElement.scrollTop > fixedThreshold)) {
+        nav.style.position = 'fixed';
+        navFiller.style.height = nav.clientHeight;
+      } else {
+        nav.style.position = 'initial';
+        navFiller.style.height = 0;
+      }
+    }
+    window.addEventListener('scroll', thinkAboutNav);
+    window.addEventListener('resize', thinkAboutNav);
+
+    var carousel = document.getElementById('carousel');
+    var thumbnails = document.getElementById('carousel-thumbs');
+    var carouselIndex = 0;
+    var carouselCount = 27;
+
+
+    var goToImage = null;
+    var goToNext = function() {
+      goToImage((carouselIndex + 1) % carouselCount);
+    }
+    var goToPrev = function() {
+      goToImage((carouselIndex + (carouselCount - 1)) % carouselCount);
+    }
+
+    window.onload = function() {
+      if (window.location.hash.indexOf('rsvp') > 0) {
+        onShowRSVP();
+      }
+      var galleryFolder = 'engagement-photos';
+      if (window.innerWidth < 500) {
+        galleryFolder = 'engagement-photos-mobile';
+      }
+
+     
+      // start the video
+     // var video = document.getElementById('hero-video')
+     // video.playbackRate = 0.7;
+     // video.play();
+
+      // load the carousel
+      goToImage = function(idx) {
+        var existing = carousel.querySelectorAll('img-container');
+        var toDelete = [];
+        for (var ii = 0; ii < existing.length; ii ++) {
+          toDelete.push(existing.item(ii));
+        }
+        var container = document.createElement('div');
+        container.classList.add('img-container');
+        carousel.appendChild(container);
+
+        var blurred = document.createElement('img');
+        blurred.src = './assets/images/' + galleryFolder + '/' + idx + '.jpg';
+        blurred.classList.add('blurred');
+        container.appendChild(blurred);
+        var img = document.createElement('img');
+        img.src = './assets/images/' + galleryFolder + '/' + idx + '.jpg';
+        container.appendChild(img);
+
+        var oldThumb = document.getElementById('thumb-'+carouselIndex);
+        var newThumb = document.getElementById('thumb-'+idx);
+
+        oldThumb.classList.remove('active');
+        newThumb.classList.add('active');
+        if (newThumb.parentNode.scrollLeft + newThumb.parentNode.clientWidth < newThumb.offsetLeft) {
+          newThumb.parentNode.scrollLeft = newThumb.offsetLeft;
+        }
+        if (newThumb.offsetLeft < newThumb.parentNode.scrollLeft) {
+          newThumb.parentNode.scrollLeft = newThumb.offsetLeft;
+        }
+        carouselIndex = idx;
+
+        setTimeout(function() {carouselCount;
+          toDelete.forEach(function(node){
+            if (node.parentNode) {
+              node.parentNode.removeChild(node);
+            }
+          });
+        }, 500);
+
+        resetAdvanceInterval();
+      };
+
+      var advanceInterval = null;
+      var resetAdvanceInterval = function() {
+        clearInterval(advanceInterval);
+        advanceInterval = setInterval(goToNext, 3500);
+      };
+
+      for (var idx = 0; idx < carouselCount; idx ++) {
+        var img = document.createElement('img');
+        img.src = './assets/images/' + galleryFolder + '/' + idx + '.jpg';
+        img.id = "thumb-" + idx;
+        img.onclick = function(idx) { return function() { goToImage(idx); } }(idx)
+        thumbnails.appendChild(img);
+      }
+
+      goToImage(0);
+    }
+
+  </script>
+
+</body>
+</html>
